@@ -1,0 +1,1 @@
+pyinstaller --onefile "Rapid_File_Mover.py"
