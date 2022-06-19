@@ -12,7 +12,7 @@ root.withdraw()
 # function
 
 #mover
-def start_moving(target):
+def start_moving(target,destination):
     # target data
     target_stats = os.stat(target)
     target_filename = os.path.basename(target)
@@ -70,6 +70,7 @@ intial_folder = filedialog.askdirectory(title="Select Folder")
 
 # checks wether user selected target or cancelled
 if intial_folder:
+    print("Reading Subfolders...")
     subfolders_list = fast_scandir(intial_folder)
     # dialog to get user choice of destination
     destination = filedialog.askdirectory(title="Select Destination")
@@ -77,18 +78,35 @@ if intial_folder:
         destination = os.path.join(destination, os.path.basename(intial_folder))
         if os.path.exists(destination) == False:
             os.mkdir(destination)
+            
+        for subitem_name in os.listdir(intial_folder):
+            target = os.path.join(intial_folder,subitem_name)
+            if os.path.isfile(target):
+                start_moving(target,destination)                  
+
         for subfolder_name in subfolders_list:
-            destination = subfolder_name.replace(intial_folder,destination)
-            print(destination)
-            input('PAUSED')
-            #destination_subfolder_name = os.path.join(destination, os.path.basename(subfolder_name))
-            if os.path.exists(destination) == False:
-               os.mkdir(destination)
-            #if os.path.exists(destination_subfolder_name) == False:
-            #    os.mkdir(destination_subfolder_name)
+            subitem_destination = subfolder_name.replace(intial_folder,destination)
+
+            if os.path.exists(subitem_destination) == False:
+               os.mkdir(subitem_destination)
             for subitem_name in os.listdir(subfolder_name):
-                target = subfolder_name + '/' + subitem_name
+                target = os.path.join(subfolder_name,subitem_name)
                 if os.path.isfile(target):
-                    start_moving(target)
+                    start_moving(target,subitem_destination)
+        
+        # used to get deeper subfolders first so they are deleted before parentfolders
+        subfolders_list.reverse()
+
+        for del_sub in subfolders_list:
+            try:
+                os.removedirs(del_sub)
+            except OSError as error:
+                error = ""
+        try:
+            os.removedirs(intial_folder)
+            print("Deleted " + intial_folder)
+        except OSError as error:
+            error = ""
+
     # confirming user input to prevent weird silent ending 
     input("Press ENTER to continue.")       
