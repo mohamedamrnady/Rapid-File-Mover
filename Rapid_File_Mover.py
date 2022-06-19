@@ -71,10 +71,12 @@ intial_folder = filedialog.askdirectory(title="Select Folder")
 # checks wether user selected target or cancelled
 if intial_folder:
     print("Reading Subfolders...")
+    print("May take a while if the folder is so branched...")
     subfolders_list = fast_scandir(intial_folder)
     # dialog to get user choice of destination
     destination = filedialog.askdirectory(title="Select Destination")
     if destination:
+        print("Starting process...")
         destination = os.path.join(destination, os.path.basename(intial_folder))
         if os.path.exists(destination) == False:
             os.mkdir(destination)
