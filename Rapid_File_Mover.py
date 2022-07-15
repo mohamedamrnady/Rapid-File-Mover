@@ -2,7 +2,6 @@ import os
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
-from typing import final
 
 # root details
 root = Tk()
@@ -11,8 +10,10 @@ root.withdraw()
 
 # function
 
-#mover
-def start_moving(target,destination):
+# mover
+
+
+def start_moving(target, destination):
     # target data
     target_stats = os.stat(target)
     target_filename = os.path.basename(target)
@@ -23,7 +24,7 @@ def start_moving(target,destination):
     destination_driveletter = os.path.splitdrive(destination)[0]
 
     # final destination : file will be here after the program ends
-    destination_final = os.path.join(destination,target_filename)
+    destination_final = os.path.join(destination, target_filename)
 
     # output
 
@@ -53,16 +54,19 @@ def start_moving(target,destination):
             os.remove(target)
     print("Done Copying " + target_filename)
     print("System might take some time to identify the moving process")
-    print("Please Be Patient!")   
+    print("Please Be Patient!")
 
 # scan subfolders loop
+
+
 def fast_scandir(dirname):
-    subfolders= [f.path for f in os.scandir(dirname) if f.is_dir()]
+    subfolders = [f.path for f in os.scandir(dirname) if f.is_dir()]
     for dirname in list(subfolders):
         subfolders.extend(fast_scandir(dirname))
     return subfolders
 
-#program starts here
+# program starts here
+
 
 # dialog to get user choice of file
 intial_folder = filedialog.askdirectory(title="Select Folder")
@@ -77,26 +81,28 @@ if intial_folder:
     destination = filedialog.askdirectory(title="Select Destination")
     if destination:
         print("Starting process...")
-        destination = os.path.join(destination, os.path.basename(intial_folder))
+        destination = os.path.join(
+            destination, os.path.basename(intial_folder))
         if os.path.exists(destination) == False:
             os.mkdir(destination)
-            
+
         for subitem_name in os.listdir(intial_folder):
-            target = os.path.join(intial_folder,subitem_name)
+            target = os.path.join(intial_folder, subitem_name)
             if os.path.isfile(target):
-                start_moving(target,destination)                  
+                start_moving(target, destination)
 
         for subfolder_name in subfolders_list:
-            subitem_destination = subfolder_name.replace(intial_folder,destination)
+            subitem_destination = subfolder_name.replace(
+                intial_folder, destination)
 
             if os.path.exists(subitem_destination) == False:
-               os.mkdir(subitem_destination)
+                os.mkdir(subitem_destination)
             for subitem_name in os.listdir(subfolder_name):
-                target = os.path.join(subfolder_name,subitem_name)
+                target = os.path.join(subfolder_name, subitem_name)
                 if os.path.isfile(target):
-                    start_moving(target,subitem_destination)
-        
-        # used to get deeper subfolders first so they are deleted before parentfolders
+                    start_moving(target, subitem_destination)
+
+        # used to get deeper subfolders first so they are deleted before parent-folders
         subfolders_list.reverse()
 
         for del_sub in subfolders_list:
@@ -110,5 +116,5 @@ if intial_folder:
         except OSError as error:
             error = ""
 
-    # confirming user input to prevent weird silent ending 
-    input("Press ENTER to continue.")       
+    # confirming user input to prevent weird silent ending
+    input("Press ENTER to continue.")
