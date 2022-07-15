@@ -9,6 +9,7 @@ root = Tk()
 root.title = "Rapid File Mover"
 root.withdraw()
 
+
 def start_process(target):
     # target data
     target_stats = os.stat(target)
@@ -20,7 +21,7 @@ def start_process(target):
     destination_driveletter = os.path.splitdrive(destination)[0]
 
     # final destination : file will be here after the program ends
-    destination_final = os.path.join(destination,target_filename)
+    destination_final = os.path.join(destination, target_filename)
 
     # output
 
@@ -44,13 +45,16 @@ def start_process(target):
                 final_bytes = open(destination_final, "wb")
                 final_bytes.write(target_bytes)
                 os.remove(target)
+                final_bytes.close()
         if os.path.exists(destination_final) == False:
             final_bytes = open(destination_final, "wb")
             final_bytes.write(target_bytes)
             os.remove(target)
+            final_bytes.close()
     print("Done Copying " + target_filename)
     print("System might take some time to identify the moving process")
-    print("Please Be Patient!")   
+    print("Please Be Patient!")
+
 
 # dialog to get user choice of file
 intial_folder = filedialog.askdirectory(title="Select Folder")
@@ -62,7 +66,8 @@ if intial_folder:
     # dialog to get user choice of destination
     destination = filedialog.askdirectory(title="Select Destination")
     if destination:
-        destination = os.path.join(destination, os.path.basename(intial_folder))
+        destination = os.path.join(
+            destination, os.path.basename(intial_folder))
         if os.path.exists(destination) == False:
             os.mkdir(destination)
         for subfolder_name in os.listdir(intial_folder):
@@ -71,6 +76,6 @@ if intial_folder:
                 start_process(target)
             if os.path.isdir(target):
                 folder_list.append(target)
-    print(folder_list)     
-    # confirming user input to prevent weird silent ending 
-    input("Press ENTER to continue.")       
+    print(folder_list)
+    # confirming user input to prevent weird silent ending
+    input("Press ENTER to continue.")

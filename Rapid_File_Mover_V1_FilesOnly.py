@@ -55,12 +55,12 @@ if target_list:
                         final_bytes = open(destination_final, "wb")
                         final_bytes.write(target_bytes)
                         os.remove(target)
+                        final_bytes.close()
                 if os.path.exists(destination_final) == False:
                     final_bytes = open(destination_final, "wb")
                     final_bytes.write(target_bytes)
                     os.remove(target)
+                    final_bytes.close()
             print("Done Copying " + target_filename)
-            print("System might take some time to identify the moving process")
-            print("Please Be Patient! You can exit the program before it loads")
-        # confirming user input to prevent weird silent ending    
+        # confirming user input to prevent weird silent ending
         input("Press ENTER to continue.")

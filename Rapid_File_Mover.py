@@ -36,7 +36,7 @@ def start_moving(target, destination):
     # checks wether file on same drive or NOT
     if target_driveletter == destination_driveletter:
         os.rename(target, destination_final)
-        print("Done Copying " + target_filename)
+        print("Done Moving " + target_filename)
     if not target_driveletter == destination_driveletter:
         target_bytes = open(target, "rb").read()
         if os.path.exists(destination_final) == True:
@@ -48,11 +48,13 @@ def start_moving(target, destination):
                 final_bytes = open(destination_final, "wb")
                 final_bytes.write(target_bytes)
                 os.remove(target)
+                final_bytes.close()
         if os.path.exists(destination_final) == False:
             final_bytes = open(destination_final, "wb")
             final_bytes.write(target_bytes)
             os.remove(target)
-    print("Done Copying " + target_filename)
+            final_bytes.close()
+    print("Done Moving " + target_filename)
     print("System might take some time to identify the moving process")
     print("Please Be Patient!")
 
